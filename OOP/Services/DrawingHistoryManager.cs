@@ -15,23 +15,11 @@ namespace OOP.Services
 
         public ShapeBase Undo()
         {
-            if (_undoStack.Count > 0)
-            {
-                var shape = _undoStack.Pop();
-                _redoStack.Push(shape);
-                return shape;
-            }
             return null;
         }
 
         public ShapeBase Redo()
         {
-            if (_redoStack.Count > 0)
-            {
-                var shape = _redoStack.Pop();
-                _undoStack.Push(shape);
-                return shape;
-            }
             return null;
         }
 
