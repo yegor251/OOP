@@ -83,7 +83,7 @@ namespace OOP.Models
             }
         }
 
-        public override void HandleMouseUp(Point endPoint, Canvas canvas)
+        public override void HandleMouseUp(Point endPoint, MouseButton button, Canvas canvas)
         {
             if (_tempPolygon != null)
             {
@@ -94,6 +94,7 @@ namespace OOP.Models
 
                 RenderedShape = Draw();
                 canvas.Children.Add(RenderedShape);
+                NotifyShapeCompleted();
 
                 _tempPolygon = null;
             }

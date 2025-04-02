@@ -59,16 +59,16 @@ namespace OOP.Views
 
         private void DrawingCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            _drawingManager.HandleMouseUp(e.GetPosition(DrawingCanvas));
+            _drawingManager.HandleMouseUp(e.GetPosition(DrawingCanvas), e.ChangedButton);
             UpdateUndoRedoButtons();
         }
 
         private void Undo_Click(object sender, RoutedEventArgs e)
         {
-            var shape = _historyManager.Undo();
-            if (shape != null && shape.RenderedShape != null)
+            _historyManager.Undo();
+            if (DrawingCanvas.Children.Count > 0)
             {
-                DrawingCanvas.Children.Remove(shape.RenderedShape);
+                DrawingCanvas.Children.RemoveAt(DrawingCanvas.Children.Count - 1);
                 UpdateUndoRedoButtons();
             }
         }

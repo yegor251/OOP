@@ -13,13 +13,23 @@ namespace OOP.Services
             _redoStack.Clear();
         }
 
-        public ShapeBase Undo()
+        public void Undo()
         {
-            return null;
+            if (_undoStack.Count > 0)
+            {
+                var shape = _undoStack.Pop();
+                _redoStack.Push(shape);
+            }
         }
 
         public ShapeBase Redo()
         {
+            if (_redoStack.Count > 0)
+            {
+                var shape = _redoStack.Pop();
+                _undoStack.Push(shape);
+                return shape;
+            }
             return null;
         }
 

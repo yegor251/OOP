@@ -20,6 +20,25 @@ public class DrawingManager
     public void StartDrawing(ShapeBase shape)
     {
         _currentShape = shape;
+        _currentShape.ShapeCompleted += OnShapeCompleted;
+        _currentShape.ShapeUpdated += OnShapeUpdated;
+        _currentShape.ShapeStarted += OnShapeStarted;
+    }
+    
+    private void OnShapeCompleted(ShapeBase shape)
+    {
+        HistoryManager.AddShape(shape.DeepClone());
+    }
+    
+    private void OnShapeUpdated(ShapeBase shape)
+    {
+        HistoryManager.Undo();
+        HistoryManager.AddShape(shape.DeepClone());
+    }
+    
+    private void OnShapeStarted(ShapeBase shape)
+    {
+        HistoryManager.AddShape(shape.DeepClone());
     }
 
     public void HandleMouseDown(Point startPoint, MouseButtonEventArgs e)
@@ -38,12 +57,11 @@ public class DrawingManager
         _currentShape.HandleMouseMove(currentPoint, DrawingCanvas);
     }
 
-    public void HandleMouseUp(Point endPoint)
+    public void HandleMouseUp(Point endPoint,  MouseButton button)
     {
         if (_currentShape == null || !_isDrawing) return;
         _isDrawing = false;
-        _currentShape.HandleMouseUp(endPoint, DrawingCanvas);
-        HistoryManager.AddShape(_currentShape);
+        _currentShape.HandleMouseUp(endPoint, button, DrawingCanvas);
     }
 
     public void SetStrokeColor(Brush color)

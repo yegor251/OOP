@@ -59,7 +59,7 @@ namespace OOP.Models
             }
         }
 
-        public override void HandleMouseUp(Point endPoint, Canvas canvas)
+        public override void HandleMouseUp(Point endPoint, MouseButton button, Canvas canvas)
         {
             if (_tempEllipse != null)
             {
@@ -72,6 +72,7 @@ namespace OOP.Models
                 // Создаем окончательный эллипс и добавляем его на холст
                 RenderedShape = Draw();
                 canvas.Children.Add(RenderedShape);
+                NotifyShapeCompleted();
 
                 // Очищаем временный эллипс
                 _tempEllipse = null;

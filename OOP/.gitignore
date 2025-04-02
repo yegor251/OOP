@@ -1,0 +1,72 @@
+# Игнорировать файлы сборки и объектные файлы
+[Bb]in/
+[Oo]bj/
+
+# Игнорировать файлы пользовательских настроек
+*.user
+*.suo
+
+# Игнорировать файлы резервных копий
+*.bak
+*.tmp
+
+# Игнорировать результаты работы инструментов
+*.log
+*.nupkg
+*.pdb
+*.cache
+
+# Игнорировать пакеты NuGet
+[Nn]u[Gg]et/
+*.nupkg
+packages/
+
+# Игнорировать файлы Visual Studio
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.sln.docstates
+
+# Игнорировать файлы ReSharper
+_ReSharper.*
+*.ReSharper
+
+# Игнорировать файлы Rider
+.idea/
+*.iml
+
+# Игнорировать файлы Azure
+*.azure*
+
+# Игнорировать файлы Docker
+[Dd]ocker/
+docker-compose.*
+*.dockerignore
+
+# Игнорировать файлы тестовых покрытий
+.coverage
+TestResults/
+
+# Игнорировать файлы специфичные для C#
+*.csproj.user
+*.csproj.assemblyinfo.cs
+*.csproj.nuget.*
+*.csproj.nuget.dgspec.json
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets
+
+# Игнорировать файлы специфичные для .NET
+.project.lock.json
+artifacts/
+
+# Игнорировать файлы решения Visual Studio
+*.sln
+
+# Игнорировать файлы .bin (если такие есть)
+*.bin
+
+# Игнорировать XML-файлы (например, файлы конфигурации или отчеты)
+*.xml
+
+# Игнорировать всё содержимое папки OOP\bin
+OOP/bin/

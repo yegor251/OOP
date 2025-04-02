@@ -20,11 +20,30 @@ namespace OOP.Models
         public double StrokeThickness { get; set; } = 2;
         [XmlIgnore]
         public Shape RenderedShape { get; protected set; }
+        public event Action<ShapeBase> ShapeCompleted;
+        protected void NotifyShapeCompleted()
+        {
+            ShapeCompleted?.Invoke(this);
+        }
+        public event Action<ShapeBase> ShapeUpdated;
+        protected void NotifyShapeUpdated()
+        {
+            ShapeUpdated?.Invoke(this);
+        }
+        public event Action<ShapeBase> ShapeStarted;
+        protected void NotifyShapeStarted()
+        {
+            ShapeStarted?.Invoke(this);
+        }
+        public virtual ShapeBase DeepClone()
+        {
+            return (ShapeBase)this.MemberwiseClone();
+        }
         public abstract Shape Draw();
         public abstract void UpdateShape(Point currentPoint);
         public abstract void HandleMouseDown(Point startPoint, MouseButtonEventArgs e, Canvas canvas);
         public abstract void HandleMouseMove(Point currentPoint, Canvas canvas);
-        public abstract void HandleMouseUp(Point endPoint, Canvas canvas);
+        public abstract void HandleMouseUp(Point endPoint, MouseButton button, Canvas canvas);
         public virtual ShapeBase Create() => this;
         public void SetStart(Point start) => StartPoint = start;
         public void SetEnd(Point end) => EndPoint = end;
