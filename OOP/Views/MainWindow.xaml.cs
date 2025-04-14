@@ -131,12 +131,13 @@ namespace OOP.Views
                 var shapes = fileManager.LoadShapesFromFile(openFileDialog.FileName);
 
                 _historyManager.Clear();
+                UpdateUndoRedoButtons();
                 DrawingCanvas.Children.Clear();
 
                 foreach (var shape in shapes)
                 {
                     DrawingCanvas.Children.Add(shape.Draw());
-                    _historyManager.AddShape(shape);
+                   // _historyManager.AddShape(shape);
                 }
             }
         }

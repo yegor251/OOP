@@ -13,33 +13,48 @@
         <Style x:Key="GreenButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="Green"/>
         </Style>
+
+        <Style x:Key="MenuBarButtonStyle" TargetType="MenuItem">
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="Margin" Value="5,0,0,0"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
     </Window.Resources>
+    
     <Grid>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Name="ButtonsPanel">
-            <!-- Кнопки для выбора фигур -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Menu Bar -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Сохранить" Click="SaveButton_Click"/>
+                <MenuItem Header="Загрузить" Click="LoadButton_Click"/>
+            </MenuItem>
+            <MenuItem Header="↩️" Name="UndoButton" Click="Undo_Click" IsEnabled="False" Style="{StaticResource MenuBarButtonStyle}"/>
+            <MenuItem Header="↪️" Name="RedoButton" Click="Redo_Click" IsEnabled="False" Style="{StaticResource MenuBarButtonStyle}"/>
+        </Menu>
+
+        <!-- Buttons Panel -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Name="ButtonsPanel">
             <Button Name="LineButton" Content="Отрезок" Click="Button_Click" Style="{StaticResource BaseButtonStyle}"/>
             <Button Name="RectangleButton" Content="Прямоугольник" Click="Button_Click" Style="{StaticResource BaseButtonStyle}"/>
             <Button Name="EllipseButton" Content="Эллипс" Click="Button_Click" Style="{StaticResource BaseButtonStyle}"/>
             <Button Name="PolygonButton" Content="Многоугольник" Click="Button_Click" Style="{StaticResource BaseButtonStyle}"/>
             <Button Name="PolylineButton" Content="Ломаная" Click="Button_Click" Style="{StaticResource BaseButtonStyle}"/>
             
-            <!-- Кнопки для Undo и Redo -->
-            <Button Name="UndoButton" Content="↩️" Click="Undo_Click" Style="{StaticResource BaseButtonStyle}" IsEnabled="False"/>
-            <Button Name="RedoButton" Content="↪️" Click="Redo_Click" Style="{StaticResource BaseButtonStyle}" IsEnabled="False"/>
-            
-            <!-- Кнопки для выбора цвета линии и заливки -->
             <Button Name="StrokeColorButton" Content="Цвет линии" Click="StrokeColorButton_Click" Style="{StaticResource BaseButtonStyle}"/>
             <Button Name="FillColorButton" Content="Цвет заливки" Click="FillColorButton_Click" Style="{StaticResource BaseButtonStyle}"/>
             <Button Name="StrokeThicknessButton" Content="Толщина линии" Click="StrokeThicknessButton_Click" Style="{StaticResource BaseButtonStyle}"/>
-            
-            <Button Name="SaveButton" Content="Сохранить" Click="SaveButton_Click" Style="{StaticResource BaseButtonStyle}"/>
-            <Button Name="LoadButton" Content="Загрузить" Click="LoadButton_Click" Style="{StaticResource BaseButtonStyle}"/>
         </StackPanel>
-        
-        <!-- Холст для рисования -->
-        <Canvas Name="DrawingCanvas" Background="White" Margin="0,40,0,0"
+
+        <!-- Drawing Canvas -->
+        <Canvas Grid.Row="2" Name="DrawingCanvas" Background="White"
                 MouseDown="DrawingCanvas_MouseDown"
                 MouseUp="DrawingCanvas_MouseUp"
-                MouseMove="DrawingCanvas_MouseMove" />
+                MouseMove="DrawingCanvas_MouseMove"/>
     </Grid>
 </Window>
