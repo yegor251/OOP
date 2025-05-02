@@ -21,6 +21,7 @@ namespace OOP.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Сбрасываем стили кнопок в ButtonsPanel
             foreach (var child in ButtonsPanel.Children)
             {
                 if (child is Button button)
@@ -28,6 +29,17 @@ namespace OOP.Views
                     button.Style = (Style)FindResource("BaseButtonStyle");
                 }
             }
+    
+            // Сбрасываем стили кнопок в ShapesPanel
+            foreach (var child in ShapesPanel.Children)
+            {
+                if (child is Button button)
+                {
+                    button.Style = (Style)FindResource("ShapesMenuButtonStyle");
+                }
+            }
+    
+            // Устанавливаем зеленый стиль для выбранной кнопки
             if (sender is Button selectedButton)
             {
                 selectedButton.Style = (Style)FindResource("GreenButtonStyle");
@@ -37,13 +49,25 @@ namespace OOP.Views
             {
                 string shapeType = button1.Name.Replace("Button", "");
                 
-                var shape = ShapeFactory.CreateShape(shapeType);
-                
-                if (shape != null)
+                if (button1.Tag is Type shapeTypeFromTag)
                 {
-                    _drawingManager.StartDrawing(shape);
+                    var shape = (ShapeBase)Activator.CreateInstance(shapeTypeFromTag);
+                    var createdShape = shape.Create();
+                    if (createdShape != null)
+                    {
+                        _drawingManager.StartDrawing(createdShape);
+                    }
+                }
+                else
+                {
+                    var shape = ShapeFactory.CreateShape(shapeType);
+                    if (shape != null)
+                    {
+                        _drawingManager.StartDrawing(shape);
+                    }
                 }
             }
+            ShapesMenuItem.IsSubmenuOpen = false;
         }
 
         private void DrawingCanvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -129,7 +153,7 @@ namespace OOP.Views
             {
                 var fileManager = new FileManager();
                 var shapes = fileManager.LoadShapesFromFile(openFileDialog.FileName);
-
+                
                 _historyManager.Clear();
                 UpdateUndoRedoButtons();
                 DrawingCanvas.Children.Clear();
@@ -137,7 +161,6 @@ namespace OOP.Views
                 foreach (var shape in shapes)
                 {
                     DrawingCanvas.Children.Add(shape.Draw());
-                   // _historyManager.AddShape(shape);
                 }
             }
         }
@@ -149,6 +172,45 @@ namespace OOP.Views
             {
                 _drawingManager.SetStrokeThickness(thicknessDialog.SelectedThickness);
             }
+        }
+        
+        private void AddShapeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "DLL files (*.dll)|*.dll",
+                Title = "Выберите DLL с фигурой"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var assembly = System.Reflection.Assembly.LoadFrom(openFileDialog.FileName);
+                    FileManager.RegisterPluginAssembly(assembly);
+                    var shapeTypes = assembly.GetTypes()
+                        .Where(t => t.IsSubclassOf(typeof(ShapeBase)) && !t.IsAbstract);
+                    Console.WriteLine(assembly);
+
+                    foreach (var type in shapeTypes)
+                    {
+                        var button = new Button
+                        {
+                            Content = type.Name.Replace("Shape", ""),
+                            Name = type.Name.Replace("Shape", "Button"),
+                            Style = (Style)FindResource("ShapesMenuButtonStyle"),
+                            Tag = type
+                        };
+                        button.Click += Button_Click;
+                        ShapesPanel.Children.Insert(ShapesPanel.Children.Count - 1, button);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка загрузки фигуры: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            ShapesMenuItem.IsSubmenuOpen = false;
         }
     }
 }
